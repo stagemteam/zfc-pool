@@ -1,0 +1,38 @@
+{
+  "name": "stagem/zfc-pool",
+  "description": "Main Multisite Entity",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "status",
+    "stagem"
+  ],
+  "authors": [
+    {
+      "name": "Serhii Popov",
+      "email": "popow.serhii@gmail.com",
+      "homepage": "http://stagem.com.ua/",
+      "role": "Developer"
+    },
+    {
+      "name": "Vlad Kozak",
+      "email": "vlad.gem.typ@gmail.com",
+      "homepage": "http://stagem.com.ua/",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Stagem\\ZfcPool\\": "src/"
+    }
+  },
+  "extra": {
+    "zf": {
+      "component": "Stagem\\ZfcPool",
+      "config-provider": "Stagem\\ZfcPool\\ConfigProvider"
+    }
+  }
+}
