@@ -4,7 +4,10 @@
  * @author Vlad Kozak <vk@stagem.com.ua>
  * @datetime: 15.08.2016 13:41
  */
+
 namespace Stagem\ZfcPool;
+
+use Zend\ServiceManager\AbstractFactory\ReflectionBasedAbstractFactory;
 
 return [
     'controllers' => [
@@ -13,23 +16,33 @@ return [
         ],
         'factories' => [
             Controller\PoolController::class => Controller\Factory\PoolControllerFactory::class,
-
         ],
     ],
 
-	'service_manager' => [
-		'aliases' => [
+    'controller_plugins' => [
+        'aliases' => [
+            'pool' => Controller\Plugin\PoolPlugin::class,
+        ],
+        'factories' => [
+            Controller\Plugin\PoolPlugin::class => ReflectionBasedAbstractFactory::class,
+        ]
+    ],
+
+    'dependencies' => [
+        'aliases' => [
             'PoolService' => Service\PoolService::class,
             'PoolGrid' => Block\Grid\PoolGrid::class, // only for GridFactory
-		],
+        ],
         'invokables' => [
             Model\Pool::class => Model\Pool::class,
-            Service\PoolService::class => Service\PoolService::class,
+        ],
+        'factories' => [
+            Service\PoolService::class => Service\Factory\PoolServiceFactory::class,
         ],
         'shared' => [
             Model\Pool::class => false,
         ],
-	],
+    ],
 
     'view_manager' => [
         'template_path_stack' => [

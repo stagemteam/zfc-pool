@@ -13,6 +13,28 @@ class PoolService extends DomainServiceAbstract
 {
     protected $entity = Pool::class;
 
+    /** @var Pool */
+    protected $current;
+
+    /**
+     * @param Pool $current
+     * @return $this
+     */
+    public function setCurrent(Pool $current)
+    {
+        $this->current = $current;
+
+        return $this;
+    }
+
+    /**
+     * @return Pool
+     */
+    public function getCurrent()
+    {
+        return $this->current;
+    }
+
     public function save(Pool $pool)
     {
         $om = $this->getObjectManager();

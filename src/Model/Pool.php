@@ -8,6 +8,7 @@ namespace Stagem\ZfcPool\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 use Popov\ZfcCore\Model\DomainAwareTrait;
+use Popov\ZfcUser\Model\User;
 
 /**
  *
@@ -44,6 +45,36 @@ class Pool
      * @ORM\Column(type="string", nullable=true, length=255)
      */
     private $description;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Popov\ZfcUser\Model\User")
+     * @ORM\JoinTable(name="pools_items",
+     *      joinColumns={@ORM\JoinColumn(name="poolId", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="itemId", referencedColumnName="id", unique=true)}
+     * )
+     */
+    private $items;
+
+    /**
+     * @return mixed
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
+     * @param mixed $items
+     * @return Pool
+     */
+    public function setItems($items)
+    {
+        $this->items = $items;
+
+        return $this;
+    }
+
+
 
     /**
      * @return int
