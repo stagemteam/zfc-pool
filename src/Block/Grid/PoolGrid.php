@@ -26,7 +26,7 @@ class PoolGrid extends AbstractGrid implements ObjectManagerAwareInterface
     {
         $grid = $this->getDataGrid();
         $route = $this->getRouteMatch();
-        $view = $this->getViewRenderer();
+        $view = $this->getRenderer();
         $grid->setRendererName('jqGrid');
         $grid->setId('pool');
         $grid->setTitle('Пациенты');
