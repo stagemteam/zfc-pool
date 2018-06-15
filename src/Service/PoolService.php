@@ -4,23 +4,38 @@
  * @author Vlad Kozak <vk@stagem.com.ua>
  * @datetime: 15.08.2016 13:41
  */
+
 namespace Stagem\ZfcPool\Service;
 
 use Popov\ZfcCore\Service\DomainServiceAbstract;
-use Stagem\ZfcPool\Model\Pool as Pool;
+use Stagem\ZfcPool\Model\Pool;
+use Stagem\ZfcPool\Model\PoolInterface;
+use Stagem\ZfcPool\Model\Repository\PoolRepository;
 
+/**
+ * @method PoolRepository getRepository()
+ */
 class PoolService extends DomainServiceAbstract
 {
-    protected $entity = Pool::class;
+    const SESSION_KEY = 'pool_id';
 
-    /** @var Pool */
+    //protected $entity = Pool::class;
+
+    public function __construct(string $entity)
+    {
+        $this->entity = $entity;
+    }
+
+    /**
+     * @var PoolInterface
+     */
     protected $current;
 
     /**
-     * @param Pool $current
+     * @param PoolInterface $current
      * @return $this
      */
-    public function setCurrent(Pool $current)
+    public function setCurrent(PoolInterface $current)
     {
         $this->current = $current;
 
@@ -28,19 +43,17 @@ class PoolService extends DomainServiceAbstract
     }
 
     /**
-     * @return Pool
+     * @return PoolInterface
      */
     public function getCurrent()
     {
         return $this->current;
     }
 
-    public function save(Pool $pool)
+    public function getActivePools()
     {
-        $om = $this->getObjectManager();
-        if (!$om->contains($pool)) {
-            $om->persist($pool);
-        }
-        $om->flush();
+        // @todo Add isEnable property to interface and filter by this value
+        return $this->getRepository()->findBy([]);
+
     }
 }

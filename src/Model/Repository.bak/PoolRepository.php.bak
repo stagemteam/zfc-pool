@@ -1,0 +1,37 @@
+<?php
+/**
+ * @package Stagem_ZfcPool
+ * @author Vlad Kozak <vk@stagem.com.ua>
+ * @datetime: 15.08.2016 13:41
+ */
+namespace Stagem\ZfcPool\Model\Repository;
+
+class PoolRepository extends \Doctrine\ORM\EntityRepository
+{
+    protected $_alias = 'pool';
+
+    public function getPools()
+    {
+        $qb = $this->createQueryBuilder($this->_alias);
+
+        return $qb;
+    }
+
+    /**
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getActivePools()
+    {
+        $qb = $this->getPools();
+
+        #$qb->where(
+        #    $qb->expr()->andX(
+        #        $qb->expr()->eq($this->_alias . '.isActive', '?1')
+        #    )
+        #);
+
+        #$qb->setParameters([1 => 1]);
+
+        return $qb;
+    }
+}

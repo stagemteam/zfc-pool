@@ -15,6 +15,7 @@
 
 namespace Stagem\ZfcPool;
 
+use Stagem\ZfcPool\Model\Pool;
 use Stagem\ZfcPool\Service\PoolService;
 
 class PoolHelper
@@ -23,6 +24,11 @@ class PoolHelper
      * @var PoolService
      */
     protected $poolService;
+
+    /**
+     * @var Pool[]
+     */
+    protected $pools;
 
     public function __construct(PoolService $poolService)
     {
@@ -35,5 +41,21 @@ class PoolHelper
     public function current()
     {
         return $this->poolService->getCurrent();
+    }
+
+    /**
+     * @return Pool[]
+     */
+    public function getPools()
+    {
+        if (!$this->pools) {
+            $this->pools = $this->poolService->getActivePools();
+        }
+        return $this->pools;
+    }
+
+    public function __invoke()
+    {
+        return $this;
     }
 }

@@ -11,17 +11,23 @@ use Psr\Container\ContainerInterface;
 use Doctrine\ORM\EntityManager;
 use Stagem\ZfcPool\Model\Pool;
 use Stagem\ZfcPool\Service\PoolService;
+use Stagem\ZfcSystem\Config\SysConfig;
+use Zend\Stdlib\Exception\RuntimeException;
 
 class PoolServiceFactory
 {
     public function __invoke(ContainerInterface $container)
     {
-        $poolService = new PoolService();
+        $sysConfig = $container->get(SysConfig::class);
+        $strategyName = ucfirst($sysConfig->getConfig('pool/general/strategy'));
 
-        // @todo продумати реалізацію Pool відносно цих заміток @link https://trello.com/c/vjIQacQX/12-проблема-pool
-        $om = $container->get(EntityManager::class);
-        $pool = $om->find(Pool::class, 1);
-        $poolService->setCurrent($pool);
+        if (!$container->has($strategyName)) {
+            throw new RuntimeException(sprintf('There is no registered pool strategy with name "%s"', $strategyName));
+        }
+
+        $strategy = $container->get($strategyName);
+        $poolService = (new PoolService($sysConfig->getConfig('pool/general/pool_class')))
+            ->setCurrent($strategy->getPool());
 
         return $poolService;
     }

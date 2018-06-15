@@ -12,10 +12,10 @@ use Popov\ZfcUser\Model\User;
 
 /**
  *
- * @ORM\Entity(repositoryClass="Stagem\Pool\Model\Repository\PoolRepository")
+ * @ORM\Entity(repositoryClass="Stagem\ZfcPool\Model\Repository\PoolRepository")
  * @ORM\Table(name="pool")
  */
-class Pool
+class Pool implements PoolInterface
 {
 
     use DomainAwareTrait;
@@ -33,12 +33,6 @@ class Pool
      * @ORM\Column(type="string", nullable=false, length=100)
      */
     private $name;
-
-    /**
-     * @var string
-     * @ORM\Column(type="string", nullable=true, length=255)
-     */
-    private $address;
 
     /**
      * @var string
@@ -110,25 +104,6 @@ class Pool
     public function setName($name)
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAddress()
-    {
-        return $this->address;
-    }
-
-    /**
-     * @param string $address
-     * @return Pool
-     */
-    public function setAddress($address)
-    {
-        $this->address = $address;
 
         return $this;
     }

@@ -1,0 +1,9 @@
+header .pool-switcher {
+	padding: 10px 15px 5px 0;
+}
+
+header .pool-switcher .form-control {
+	display: inline-block;
+	vertical-align: middle;
+	/*margin-right: 31px;*/
+}

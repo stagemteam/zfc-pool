@@ -1,0 +1,33 @@
+<?php
+/**
+ * The MIT License (MIT)
+ * Copyright (c) 2018 Stagem Team
+ * This source file is subject to The MIT License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/MIT
+ *
+ * @category Stagem
+ * @package Stagem_ZfcPool
+ * @author Serhii Popov <popow.serhii@gmail.com>
+ * @license https://opensource.org/licenses/MIT The MIT License (MIT)
+ */
+?>
+<?php $pools = $this->pool()->getPools(); ?>
+<?php $current = $this->pool()->current(); ?>
+<div class="pool-switcher pull-right">
+	<select class="form-control">
+	    <?php foreach ($pools as $pool) : ?>
+	        <?php $selected = ''; ?>
+	        <?php if ($pool->getId() === $current->getId()) : ?>
+	            <?php $selected = 'selected="selected"' ?>
+	        <?php endif; ?>
+			<option value="<?= $pool->getName() ?>" <?= $selected ?> data-url="<?= $this->url(
+	                $this->current('routeName'),
+	                $this->current('routeParams'),
+	                ['query' => [$this->sysConfig('pool/general/url_parameter') => $pool->getName()]]
+				)?>"
+			><?= $pool->getName() ?></option>
+	    <?php endforeach;; ?>
+	</select>
+</div>

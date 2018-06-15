@@ -10,6 +10,24 @@ namespace Stagem\ZfcPool;
 use Zend\ServiceManager\AbstractFactory\ReflectionBasedAbstractFactory;
 
 return [
+    'assetic_configuration' => require 'assets.config.php',
+
+    'dependencies' => [
+        'aliases' => [
+            'PoolService' => Service\PoolService::class,
+            'PoolGrid' => Block\Grid\PoolGrid::class, // only for GridFactory
+        ],
+        'invokables' => [
+            Model\Pool::class => Model\Pool::class,
+        ],
+        'factories' => [
+            Service\PoolService::class => Service\Factory\PoolServiceFactory::class,
+        ],
+        'shared' => [
+            Model\Pool::class => false,
+        ],
+    ],
+
     'controllers' => [
         'aliases' => [
             'pool' => Controller\PoolController::class,
@@ -28,25 +46,21 @@ return [
         ]
     ],
 
-    'dependencies' => [
+    'view_helpers' => [
         'aliases' => [
-            'PoolService' => Service\PoolService::class,
-            'PoolGrid' => Block\Grid\PoolGrid::class, // only for GridFactory
-        ],
-        'invokables' => [
-            Model\Pool::class => Model\Pool::class,
+            'pool' => View\Helper\PoolHelper::class,
         ],
         'factories' => [
-            Service\PoolService::class => Service\Factory\PoolServiceFactory::class,
-        ],
-        'shared' => [
-            Model\Pool::class => false,
-        ],
+            View\Helper\PoolHelper::class => ReflectionBasedAbstractFactory::class,
+        ]
     ],
 
     'view_manager' => [
-        'template_path_stack' => [
+        /*'template_path_stack' => [
             __NAMESPACE__ => __DIR__ . '/../view',
+        ],*/
+        'prefix_template_path_stack' => [
+            'pool::' => __DIR__ . '/../view',
         ],
     ],
 
