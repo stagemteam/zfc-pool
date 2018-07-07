@@ -33,11 +33,11 @@ class ParamStrategy
      */
     protected $entityManager;
     
-    protected $sysConfig;
+    protected $config;
 
-    public function __construct(EntityManager $entityManager, CurrentHelper $currentHelper, SysConfig $sysConfig)
+    public function __construct(EntityManager $entityManager, CurrentHelper $currentHelper, array $config)
     {
-        $this->sysConfig = $sysConfig;
+        $this->config = $config;
         $this->currentHelper = $currentHelper;
         $this->entityManager = $entityManager;
     }
@@ -50,12 +50,12 @@ class ParamStrategy
         #$params = $this->currentHelper->currentRouteParams();
         $params = $request->getQueryParams();
 
-        $poolClass = $this->sysConfig->getConfig('pool/general/pool_class');
-        $poolProp = $this->sysConfig->getConfig('pool/general/pool_property');
-        $poolDefault = $this->sysConfig->getConfig('pool/general/pool_default');
+        $poolClass = $this->config['pool']['general']['pool_class'];
+        $poolProp = $this->config['pool']['general']['pool_property'];
+        $poolDefault = $this->config['pool']['general']['pool_default'];
 
-        if (isset($params[$this->sysConfig->getConfig('pool/general/url_parameter')])) {
-            $poolValue = $params[$this->sysConfig->getConfig('pool/general/url_parameter')];
+        if (isset($params[$this->config['pool']['general']['url_parameter']])) {
+            $poolValue = $params[$this->config['pool']['general']['url_parameter']];
             $pool = $this->entityManager->getRepository($poolClass)->findOneBy([$poolProp => $poolValue]);
         } elseif ($session->offsetExists(PoolService::SESSION_KEY)) {
             $pool = $this->entityManager->find($poolClass, $session->offsetGet(PoolService::SESSION_KEY));

@@ -10,7 +10,7 @@ namespace Stagem\ZfcPool\Service;
 use Popov\ZfcCore\Service\DomainServiceAbstract;
 use Stagem\ZfcPool\Model\Pool;
 use Stagem\ZfcPool\Model\PoolInterface;
-use Stagem\ZfcPool\Model\Repository\PoolRepository;
+//use Stagem\ZfcPool\Model\Repository\PoolRepository;
 
 /**
  * @method PoolRepository getRepository()

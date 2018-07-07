@@ -16,6 +16,7 @@
 namespace Stagem\ZfcPool;
 
 use Stagem\ZfcPool\Model\Pool;
+use Stagem\ZfcPool\Model\PoolInterface;
 use Stagem\ZfcPool\Service\PoolService;
 
 class PoolHelper
@@ -26,7 +27,7 @@ class PoolHelper
     protected $poolService;
 
     /**
-     * @var Pool[]
+     * @var PoolInterface[]
      */
     protected $pools;
 
@@ -36,7 +37,7 @@ class PoolHelper
     }
 
     /**
-     * @return Model\Pool
+     * @return Model\PoolInterface
      */
     public function current()
     {
@@ -44,7 +45,7 @@ class PoolHelper
     }
 
     /**
-     * @return Pool[]
+     * @return PoolInterface[]
      */
     public function getPools()
     {
