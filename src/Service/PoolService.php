@@ -53,4 +53,11 @@ class PoolService extends DomainServiceAbstract
         return $this->getRepository()->findBy([]);
 
     }
+
+    public static function createAdminPool($class)
+    {
+        return (new $class())
+            ->setId(PoolService::POOL_ADMIN)
+            ->setName('Default Configuration');
+    }
 }

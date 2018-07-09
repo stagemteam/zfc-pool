@@ -56,9 +56,7 @@ class ParamStrategy
 
         // do not remember Admin Pool in session
         if (isset($params[$urlParameter]) && ($params[$urlParameter] === PoolService::POOL_ADMIN)) {
-            return (new $poolClass())
-                ->setId(PoolService::POOL_ADMIN)
-                ->setName('Default Configuration');
+            return PoolService::createAdminPool($poolClass);
         }
 
         $session = new Container('Stagem\ZfcPool');

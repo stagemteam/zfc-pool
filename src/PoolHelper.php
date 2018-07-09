@@ -15,6 +15,8 @@
 
 namespace Stagem\ZfcPool;
 
+use Popov\ZfcCore\Helper\Config;
+use Popov\ZfcCurrent\CurrentHelper;
 use Stagem\ZfcPool\Model\Pool;
 use Stagem\ZfcPool\Model\PoolInterface;
 use Stagem\ZfcPool\Service\PoolService;
@@ -27,13 +29,25 @@ class PoolHelper
     protected $poolService;
 
     /**
+     * @var CurrentHelper
+     */
+    protected $currentHelper;
+
+    /**
+     * @var Config
+     */
+    protected $config;
+
+    /**
      * @var PoolInterface[]
      */
     protected $pools;
 
-    public function __construct(PoolService $poolService)
+    public function __construct(PoolService $poolService, CurrentHelper $currentHelper, Config $config)
     {
         $this->poolService = $poolService;
+        $this->currentHelper = $currentHelper;
+        $this->config = $config;
     }
 
     /**
@@ -42,6 +56,13 @@ class PoolHelper
     public function current()
     {
         return $this->poolService->getCurrent();
+    }
+
+    public function setCurrent($newPool)
+    {
+        $this->poolService->setCurrent($newPool);
+
+        return $this;
     }
 
     /**
@@ -53,6 +74,28 @@ class PoolHelper
             $this->pools = $this->poolService->getActivePools();
         }
         return $this->pools;
+    }
+
+    /**
+     * Get Pool from Url otherwise return Admin Pool
+     *
+     * @return PoolInterface
+     */
+    public function findFromRoute()
+    {
+        $routeParams = $this->currentHelper->currentRouteParams();
+
+        if (isset($routeParams[$this->config->get('pool/general/url_parameter')])) {
+            $identifier = $routeParams[$this->config->get('pool/general/url_parameter')];
+        }
+
+        if (!isset($identifier) || PoolService::POOL_ADMIN == $identifier) {
+            return PoolService::createAdminPool($this->config->get('pool/general/pool_class'));
+        }
+
+        $fieldIdentifier = $this->config->get('pool/general/pool_property');
+
+        return $this->poolService->getRepository()->findOneBy([$fieldIdentifier => $identifier]);
     }
 
     public function __invoke()
