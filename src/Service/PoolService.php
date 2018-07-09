@@ -1,22 +1,19 @@
 <?php
-/**
- * @package Stagem_Pool
- * @author Vlad Kozak <vk@stagem.com.ua>
- * @datetime: 15.08.2016 13:41
- */
 
 namespace Stagem\ZfcPool\Service;
 
 use Popov\ZfcCore\Service\DomainServiceAbstract;
-use Stagem\ZfcPool\Model\Pool;
 use Stagem\ZfcPool\Model\PoolInterface;
-//use Stagem\ZfcPool\Model\Repository\PoolRepository;
 
-/**
- * @method PoolRepository getRepository()
- */
 class PoolService extends DomainServiceAbstract
 {
+    /**
+     * Admin pool must be integer such as it is saved to configuration table.
+     *
+     * @var string For compatibility with url parameter
+     */
+    const POOL_ADMIN = '0';
+
     const SESSION_KEY = 'pool_id';
 
     //protected $entity = Pool::class;

@@ -19,8 +19,14 @@
                  'general' => [
                      'object_manager' => 'Doctrine\ORM\EntityManager',
                       'pool_class' => 'Application\Entity\User',
-                      'pool_property' => 'email',
-                      'pool_default' => 'admin@example.com',
+
+                      // Now, you can pass only id value in url.
+                      // If you need another value than you must fetch real pool in SysConfig::EditAction based on url parameter.
+                      #'pool_property' => 'email',
+                      #'pool_default' => 'admin@example.com',
+                      #'url_parameter' => 'user',
+                      'pool_property' => 'id',
+                      'pool_default' => '1',
                       'url_parameter' => 'user',
                       'strategy' => \Stagem\ZfcPool\Service\Strategy\ParamStrategy::class,
                  ],

@@ -17,14 +17,8 @@ return [
             'PoolService' => Service\PoolService::class,
             'PoolGrid' => Block\Grid\PoolGrid::class, // only for GridFactory
         ],
-        'invokables' => [
-            Model\Pool::class => Model\Pool::class,
-        ],
         'factories' => [
             Service\PoolService::class => Service\Factory\PoolServiceFactory::class,
-        ],
-        'shared' => [
-            Model\Pool::class => false,
         ],
     ],
 

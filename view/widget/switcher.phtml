@@ -13,21 +13,44 @@
  * @license https://opensource.org/licenses/MIT The MIT License (MIT)
  */
 ?>
-<?php $pools = $this->pool()->getPools(); ?>
+<?php use Stagem\ZfcPool\Service\PoolService; ?>
+<?php
+// @todo Create PoolBlock with method getPools() which allow add Default Configuration pull on demand with option "includeDefault".
+// @todo This allow avoid duplicate code.
+// @todo PoolInterface must contain getId(), getMnemo(), getName() methods. These methods must be used in pool switcher
+?>
 <?php $current = $this->pool()->current(); ?>
 <div class="pool-switcher pull-right">
 	<select class="form-control">
-	    <?php foreach ($pools as $pool) : ?>
+        <?php $pools = $this->pool()->getPools(); ?>
+		<?php foreach ($pools as $pool) : ?>
 	        <?php $selected = ''; ?>
 	        <?php if ($pool->getId() === $current->getId()) : ?>
 	            <?php $selected = 'selected="selected"' ?>
 	        <?php endif; ?>
-			<option value="<?= $pool->getName() ?>" <?= $selected ?> data-url="<?= $this->url(
-	                $this->current('routeName'),
-	                $this->current('routeParams'),
-	                ['query' => [$this->sysConfig('pool/general/url_parameter') => $pool->getName()]]
+			<option value="<?= $pool->getId() ?>" <?= $selected ?> data-url="<?= $this->url(
+	                //$this->current('routeName'),
+	                'admin/default/wildcard',
+	                array_merge($this->current('routeParams'), [$this->config('pool/general/url_parameter') => $pool->getId()])
+					// @todo Create ConfigHelper in Core and call $this->config('pool/general/url_parameter')
+	                //['query' => [$this->sysConfig('pool/general/url_parameter') => $pool->getName()]]
 				)?>"
 			><?= $pool->getName() ?></option>
 	    <?php endforeach;; ?>
+
+        <?php if ($this->vars('includeDefault') || true) : ?>
+            <?php $selected = ''; ?>
+            <?php if (PoolService::POOL_ADMIN === $current->getId()) : ?>
+                <?php $selected = 'selected="selected"' ?>
+            <?php endif; ?>
+			<option value="0" <?= $selected ?> data-url="<?= $this->url(
+                'admin/default/wildcard',
+                array_merge($this->current('routeParams'), [$this->config('pool/general/url_parameter') => PoolService::POOL_ADMIN])
+
+            //['query' => [$this->sysConfig('pool/general/url_parameter') => $pool->getName()]]
+            )?>"
+			><?= $this->translate('Default Configuration') ?></option>
+        <?php endif; ?>
+
 	</select>
 </div>

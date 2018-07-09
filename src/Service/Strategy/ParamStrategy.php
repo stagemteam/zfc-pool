@@ -44,18 +44,27 @@ class ParamStrategy
 
     public function getPool()
     {
-        $session = new Container('Stagem\ZfcPool');
+        $params = $this->currentHelper->currentRouteParams();
+        #$request = $this->currentHelper->currentRequest();
+        #$params = $request->getQueryParams();
 
-        $request = $this->currentHelper->currentRequest();
-        #$params = $this->currentHelper->currentRouteParams();
-        $params = $request->getQueryParams();
-
+        $urlParameter = $this->config['pool']['general']['url_parameter'];
         $poolClass = $this->config['pool']['general']['pool_class'];
         $poolProp = $this->config['pool']['general']['pool_property'];
         $poolDefault = $this->config['pool']['general']['pool_default'];
 
-        if (isset($params[$this->config['pool']['general']['url_parameter']])) {
-            $poolValue = $params[$this->config['pool']['general']['url_parameter']];
+
+        // do not remember Admin Pool in session
+        if (isset($params[$urlParameter]) && ($params[$urlParameter] === PoolService::POOL_ADMIN)) {
+            return (new $poolClass())
+                ->setId(PoolService::POOL_ADMIN)
+                ->setName('Default Configuration');
+        }
+
+        $session = new Container('Stagem\ZfcPool');
+
+        if (isset($params[$urlParameter])) {
+            $poolValue = $params[$urlParameter];
             $pool = $this->entityManager->getRepository($poolClass)->findOneBy([$poolProp => $poolValue]);
         } elseif ($session->offsetExists(PoolService::SESSION_KEY)) {
             $pool = $this->entityManager->find($poolClass, $session->offsetGet(PoolService::SESSION_KEY));
