@@ -17,7 +17,6 @@ namespace Stagem\ZfcPool;
 
 use Popov\ZfcCore\Helper\Config;
 use Popov\ZfcCurrent\CurrentHelper;
-use Stagem\ZfcPool\Model\Pool;
 use Stagem\ZfcPool\Model\PoolInterface;
 use Stagem\ZfcPool\Service\PoolService;
 
@@ -51,6 +50,7 @@ class PoolHelper
     }
 
     /**
+     * Get current pool
      * @return Model\PoolInterface
      */
     public function current()
@@ -63,6 +63,14 @@ class PoolHelper
         $this->poolService->setCurrent($newPool);
 
         return $this;
+    }
+
+    /**
+     * Get admin pool
+     */
+    public function admin()
+    {
+        return PoolService::getAdminPool($this->config->get('pool/general/pool_class'));
     }
 
     /**
@@ -90,7 +98,7 @@ class PoolHelper
         }
 
         if (!isset($identifier) || PoolService::POOL_ADMIN == $identifier) {
-            return PoolService::createAdminPool($this->config->get('pool/general/pool_class'));
+            return PoolService::getAdminPool($this->config->get('pool/general/pool_class'));
         }
 
         $fieldIdentifier = $this->config->get('pool/general/pool_property');

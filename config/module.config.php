@@ -72,5 +72,13 @@ return [
                 ]
             ]
         ],
+
+        'configuration' => [
+            'orm_default' => [
+                'filters' => [
+                    'pool_filter' => Model\Filter\PoolFilter::class,
+                ],
+            ],
+        ],
     ],
 ];

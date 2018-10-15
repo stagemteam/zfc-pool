@@ -16,7 +16,10 @@ class PoolService extends DomainServiceAbstract
 
     const SESSION_KEY = 'pool_id';
 
-    //protected $entity = Pool::class;
+    /**
+     * @var PoolInterface
+     */
+    protected $adminPool;
 
     public function __construct(string $entity)
     {
@@ -51,13 +54,18 @@ class PoolService extends DomainServiceAbstract
     {
         // @todo Add isEnable property to interface and filter by this value
         return $this->getRepository()->findBy([]);
-
     }
 
-    public static function createAdminPool($class)
+    public static function getAdminPool($class)
     {
-        return (new $class())
-            ->setId(PoolService::POOL_ADMIN)
-            ->setName('Default Configuration');
+        static $adminPool;
+
+        if (!$adminPool) {
+            $adminPool = (new $class())
+                ->setId(PoolService::POOL_ADMIN)
+                ->setName('Default Configuration');
+        }
+
+        return $adminPool;
     }
 }
