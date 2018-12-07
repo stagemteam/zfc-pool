@@ -48,25 +48,36 @@ class ParamStrategy
     public function getPool()
     {
         $params = $this->currentHelper->currentRouteParams();
-        #$request = $this->currentHelper->currentRequest();
+        $request = $this->currentHelper->currentRequest();
         #$params = $request->getQueryParams();
+        $headers = $request->getHeaders();
 
-        $urlParameter = $this->config['pool']['general']['url_parameter'];
+        $headerParameter = $this->config['pool']['general']['header_parameter'] ?? null;
+        $urlParameter = $this->config['pool']['general']['url_parameter'] ?? null;
         $poolClass = $this->config['pool']['general']['pool_class'];
         $poolProp = $this->config['pool']['general']['pool_property'];
         $poolDefault = $this->config['pool']['general']['pool_default'];
 
-        if (isset($params[$urlParameter])) {
+        if ($urlParameter && isset($params[$urlParameter])) {
+            // Pool parameter passed as Route param
             $poolValue = $params[$urlParameter];
             $pool = ($poolValue === PoolService::POOL_ADMIN)
                 ? PoolService::getAdminPool($poolClass)
                 : $this->entityManager->getRepository($poolClass)->findOneBy([$poolProp => $poolValue]);
+        } elseif($headerParameter && isset($headers[$headerParameter])) {
+            // Pool parameter passed as Header
+            $poolValue = $headers[$headerParameter][0];
+            $pool = ($poolValue === PoolService::POOL_ADMIN)
+                ? PoolService::getAdminPool($poolClass)
+                : $this->entityManager->getRepository($poolClass)->findOneBy([$poolProp => $poolValue]);
         } elseif ($this->session->offsetExists(PoolService::SESSION_KEY)) {
+            // Pool parameter saved in Session
             $poolValue = $this->session->offsetGet(PoolService::SESSION_KEY);
             $pool = ($poolValue === PoolService::POOL_ADMIN)
                 ? PoolService::getAdminPool($poolClass)
                 : $this->entityManager->find($poolClass, $this->session->offsetGet(PoolService::SESSION_KEY));
         } else {
+            // Retrieve default pool
             $pool = (php_sapi_name() == 'cli')
                 ? PoolService::getAdminPool($poolClass)
                 : $this->entityManager->getRepository($poolClass)->findOneBy([$poolProp => $poolDefault]);

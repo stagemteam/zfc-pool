@@ -31,7 +31,7 @@
   },
   "extra": {
     "zf": {
-      "component": "Stagem\\ZfcPool",
+      "gridComponent": "Stagem\\ZfcPool",
       "config-provider": "Stagem\\ZfcPool\\ConfigProvider"
     }
   }

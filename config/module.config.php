@@ -12,6 +12,18 @@ use Zend\ServiceManager\AbstractFactory\ReflectionBasedAbstractFactory;
 return [
     'assetic_configuration' => require 'assets.config.php',
 
+    'pool' => [
+        'general' => [
+            #'object_manager' => 'Doctrine\ORM\EntityManager',
+            #'pool_class' => 'Acme\Model\Marketplace',
+            #'pool_property' => 'id',
+            #'pool_default' => '1',
+            #'url_parameter' => 'pool',
+            #'header_parameter' => 'X-Pool',
+            #'strategy' => Service\Strategy\ParamStrategy::class,
+        ],
+    ],
+
     'dependencies' => [
         'aliases' => [
             'PoolService' => Service\PoolService::class,

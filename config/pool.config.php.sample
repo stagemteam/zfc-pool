@@ -24,10 +24,10 @@
                       // If you need another value than you must fetch real pool in SysConfig::EditAction based on url parameter.
                       #'pool_property' => 'email',
                       #'pool_default' => 'admin@example.com',
-                      #'url_parameter' => 'user',
                       'pool_property' => 'id',
                       'pool_default' => '1',
                       'url_parameter' => 'user',
+                      #'header_parameter' => 'X-User',
                       'strategy' => \Stagem\ZfcPool\Service\Strategy\ParamStrategy::class,
                  ],
              ],

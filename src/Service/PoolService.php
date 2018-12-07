@@ -50,6 +50,10 @@ class PoolService extends DomainServiceAbstract
         return $this->current;
     }
 
+    /**
+     * @todo Remove to getAvailablePools or simply getPools
+     * @return object[]
+     */
     public function getActivePools()
     {
         // @todo Add isEnable property to interface and filter by this value
