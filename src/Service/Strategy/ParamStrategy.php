@@ -48,9 +48,9 @@ class ParamStrategy
     public function getPool()
     {
         $params = $this->currentHelper->currentRouteParams();
-        $request = $this->currentHelper->currentRequest();
+        $headers = $this->currentHelper->currentHeaders();
+        #$request = $this->currentHelper->currentRequest();
         #$params = $request->getQueryParams();
-        $headers = $request->getHeaders();
 
         $headerParameter = $this->config['pool']['general']['header_parameter'] ?? null;
         $urlParameter = $this->config['pool']['general']['url_parameter'] ?? null;
