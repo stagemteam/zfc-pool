@@ -17,4 +17,17 @@ namespace Stagem\ZfcPool\Model;
 
 interface PoolInterface
 {
+    /**
+     * Get pool ID
+     *
+     * @return mixed
+     */
+    public function getId();
+
+    /**
+     * Get pool name
+     *
+     * @return string
+     */
+    public function getName();
 }

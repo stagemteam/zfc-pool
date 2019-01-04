@@ -12,12 +12,13 @@ use Zend\ServiceManager\AbstractFactory\ReflectionBasedAbstractFactory;
 return [
     'assetic_configuration' => require 'assets.config.php',
 
+
     'pool' => [
         'general' => [
-            #'object_manager' => 'Doctrine\ORM\EntityManager',
-            #'pool_class' => 'Acme\Model\Marketplace',
-            #'pool_property' => 'id',
-            #'pool_default' => '1',
+            'object_manager' => 'Doctrine\ORM\EntityManager',
+            'pool_class' => Model\PoolInterface::class,
+            'pool_property' => 'id',
+            'pool_default' => Service\PoolService::POOL_ADMIN,
             #'url_parameter' => 'pool',
             #'header_parameter' => 'X-Pool',
             #'strategy' => Service\Strategy\ParamStrategy::class,

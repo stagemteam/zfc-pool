@@ -19,7 +19,7 @@ class PoolService extends DomainServiceAbstract
     /**
      * @var PoolInterface
      */
-    protected $adminPool;
+    #protected $adminPool;
 
     public function __construct(string $entity)
     {
@@ -65,11 +65,55 @@ class PoolService extends DomainServiceAbstract
         static $adminPool;
 
         if (!$adminPool) {
-            $adminPool = (new $class())
-                ->setId(PoolService::POOL_ADMIN)
+            $adminPool = ($class === PoolInterface::class)
+                ? static::createAnonymousPool()
+                : new $class();
+
+            $adminPool->setId(PoolService::POOL_ADMIN)
                 ->setName('Default Configuration');
         }
 
         return $adminPool;
+    }
+
+    /**
+     * Create anonymous pool for projects which need no Strategy
+     *
+     * @return PoolInterface
+     */
+    protected static function createAnonymousPool()
+    {
+        $pool = new class() implements PoolInterface
+        {
+            protected $id;
+
+            protected $name;
+
+            public function setId($id)
+            {
+                $this->id = $id;
+
+                return $this;
+            }
+
+            public function getId()
+            {
+                return $this->id;
+            }
+
+            public function setName($name)
+            {
+                $this->name = $name;
+
+                return $this;
+            }
+
+            public function getName()
+            {
+                return $this->name;
+            }
+        };
+
+        return $pool;
     }
 }

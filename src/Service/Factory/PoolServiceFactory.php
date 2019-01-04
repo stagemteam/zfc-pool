@@ -9,9 +9,7 @@ namespace Stagem\ZfcPool\Service\Factory;
 
 use Psr\Container\ContainerInterface;
 use Doctrine\ORM\EntityManager;
-//use Stagem\ZfcPool\Model\Pool;
 use Stagem\ZfcPool\Service\PoolService;
-use Stagem\ZfcSystem\Config\SysConfig;
 use Zend\Stdlib\Exception\RuntimeException;
 
 class PoolServiceFactory
@@ -21,15 +19,20 @@ class PoolServiceFactory
         // circular dependency in SysConfig
         //$sysConfig = $container->get(SysConfig::class);
         $config = $container->get('config');
-        $strategyName = ucfirst($config['pool']['general']['strategy']);
 
-        if (!$container->has($strategyName)) {
+        // If there is no strategy then Admin Pool will be used
+        $strategyName = $config['pool']['general']['strategy'] ?? null;
+
+        if (!is_null($strategyName) && !$container->has($strategyName)) {
             throw new RuntimeException(sprintf('There is no registered pool strategy with name "%s"', $strategyName));
         }
 
-        $strategy = $container->get($strategyName);
+        $pool = is_null($strategyName)
+            ? PoolService::getAdminPool($config['pool']['general']['pool_class'])
+            : $container->get($strategyName)->getPool();
+
         $poolService = (new PoolService($config['pool']['general']['pool_class']))
-            ->setCurrent($strategy->getPool());
+            ->setCurrent($pool);
 
         return $poolService;
     }
