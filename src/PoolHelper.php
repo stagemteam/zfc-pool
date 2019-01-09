@@ -73,6 +73,11 @@ class PoolHelper
         return PoolService::getAdminPool($this->config->get('pool/general/pool_class'));
     }
 
+    public function isSingleMode()
+    {
+        return $this->config->get('pool/general/pool_class') === PoolInterface::class;
+    }
+
     /**
      * @return PoolInterface[]
      */
